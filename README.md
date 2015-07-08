@@ -22,6 +22,8 @@ runApp("[path to grinnGUI-master]/grinnGUI-master")
 
 Documentation
 =========
+Outputs are exported as tab-delimited files.
+
 list of support functions:
 * convertToGrinnID
 * fetchCorrGrinnNetwork
