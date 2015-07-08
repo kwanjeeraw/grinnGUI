@@ -20,9 +20,9 @@ wellPanel(
   ),
   fluidRow(
     column(12,radioButtons("dbXref", label ="dbXref",inline = TRUE,
-                           choices = list("grinn"="grinn","chebi"="chebi","kegg"="kegg","pubchem"="pubchem",
+                           choices = list("chebi"="chebi","kegg"="kegg","pubchem"="pubchem",
                                           "inchi"="inchi","hmdb"="hmdb","smpdb"="smpdb","reactome"="reactome",
-                                          "uniprot"="uniprot","ensembl"="ensembl","entrezgene"="entrezgene"),selected = "grinn"))
+                                          "uniprot"="uniprot","ensembl"="ensembl","entrezgene"="entrezgene"),selected = "kegg"))
   ),
   hr(),
   actionButton("submit","Submit")

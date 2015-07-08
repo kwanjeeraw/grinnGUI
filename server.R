@@ -12,10 +12,10 @@ shinyServer(function(input, output) {
       "fetchCorrNetwork" = source("layout/corrnetwork.R", local=TRUE),
       "fetchDiffCorrNetwork" = source("layout/diffcorrnetwork.R", local=TRUE),
       "fetchCorrGrinnNetwork" = source("layout/corrgrinn.R", local=TRUE), 
-      "fetchDiffCorrGrinnNetwork" = source("layout/diffgrinn.R"),
-      "fetchGrinnCorrNetwork" = source("layout/grinncorr.R"), 
-      "fetchGrinnDiffCorrNetwork" = source("layout/grinndiff.R"),
-      "convertToGrinnID" = source("layout/convertid.R")
+      "fetchDiffCorrGrinnNetwork" = source("layout/diffgrinn.R", local=TRUE),
+      "fetchGrinnCorrNetwork" = source("layout/grinncorr.R", local=TRUE), 
+      "fetchGrinnDiffCorrNetwork" = source("layout/grinndiff.R", local=TRUE),
+      "convertToGrinnID" = source("layout/convertid.R", local=TRUE)
     )
   })
   
@@ -66,35 +66,40 @@ shinyServer(function(input, output) {
   })
 
   #execute functions
-  returnResult <- reactive({
+  values <- reactiveValues()
+  exeGrinn <- function(){
     if(input$fnCall == "fetchGrinnNetwork"){
-      result = fetchGrinnNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref)
+      values$myv = fetchGrinnNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref)
     }
     if(input$fnCall == "fetchCorrNetwork"){
-      result = fetchCorrNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method)
+      values$myv = fetchCorrNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method)
     }
     if(input$fnCall == "fetchDiffCorrNetwork"){
-      result = fetchDiffCorrNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method)
+      values$myv = fetchDiffCorrNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method)
     }
     if(input$fnCall == "fetchCorrGrinnNetwork"){
-        result = fetchCorrGrinnNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, 
-          sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource)
+      values$myv = fetchCorrGrinnNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, 
+                                     sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource)
     }
     if(input$fnCall == "fetchDiffCorrGrinnNetwork"){
-        result = fetchDiffCorrGrinnNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, 
-          sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource)
+      values$myv = fetchDiffCorrGrinnNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, 
+                                         sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource)
     }
     if(input$fnCall == "fetchGrinnCorrNetwork"){
-        result = fetchGrinnCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
-          datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method)
+      values$myv = fetchGrinnCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
+                                     datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method)
     }
     if(input$fnCall == "fetchGrinnDiffCorrNetwork"){
-        result = fetchGrinnDiffCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
-          datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method)
+      values$myv = fetchGrinnDiffCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
+                                         datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method)
     }
     if(input$fnCall == "convertToGrinnID"){
-        result = convertToGrinnID(txtInput=unlist(txtInput()), nodetype=input$from, dbXref=input$dbXref)
+      values$myv = convertToGrinnID(txtInput=unlist(txtInput()), nodetype=input$from, dbXref=input$dbXref)
     }
+  }
+  returnResult <- reactive({
+    exeGrinn()
+    values$myv
   })
 
   #outputs
@@ -125,7 +130,7 @@ shinyServer(function(input, output) {
   output$nodeTable <- renderTable({
     if (input$submit == 0) return()
     isolate({
-      head(returnResult()$nodes[,c(1,2,4)], n=10)
+      head(returnResult()$nodes[,c(1,2,4)], n=10)      
     })
   })
   output$edgeTable <- renderTable({
@@ -142,7 +147,7 @@ shinyServer(function(input, output) {
   })
   output$downloadEdge <- downloadHandler(
     filename = function() { 
-      paste('grinnNwEdge.txt') 
+      paste('grinnOutEdge.txt') 
     },
     content = function(file) {
       write.table(as.matrix(returnResult()$edges), file, sep='\t', row.names = F, quote = FALSE)
@@ -150,7 +155,7 @@ shinyServer(function(input, output) {
   )
   output$downloadNode <- downloadHandler(
     filename = function() { 
-      paste('grinnNwNode.txt') 
+      paste('grinnOutNode.txt') 
     },
     content = function(file) {
       write.table(as.matrix(returnResult()$nodes), file, sep='\t', row.names = F, quote = FALSE)
@@ -158,7 +163,7 @@ shinyServer(function(input, output) {
   )
   output$downloadId <- downloadHandler(
     filename = function() { 
-      paste('convertedID.txt') 
+      paste('grinnOutId.txt') 
     },
     content = function(file) {
       write.table(as.matrix(returnResult()), file, sep='\t', row.names = F, quote = FALSE)
