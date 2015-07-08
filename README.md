@@ -10,7 +10,7 @@ The user interface is implemented using [Shiny](http://shiny.rstudio.com/) and r
 
 Install and Run
 =========
-* Requires [shiny](http://shiny.rstudio.com/) and [grinn](https://github.com/kwanjeeraw/grinn). 
+* Require [shiny](http://shiny.rstudio.com/) and [grinn](https://github.com/kwanjeeraw/grinn). 
 * Download grinnGUI .zip file and unzip 
 * Run the following code
 
