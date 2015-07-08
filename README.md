@@ -7,6 +7,7 @@ Description
 =========
 grinnGUI is the graphical user interface for [grinn](https://github.com/kwanjeeraw/grinn) R package.
 The user interface is implemented using [Shiny](http://shiny.rstudio.com/) and runs on a web browser (Safari, Chrome, Firefox and etc.).
+![demo](screenshot.png)
 
 Install and Run
 =========
