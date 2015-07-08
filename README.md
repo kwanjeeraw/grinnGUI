@@ -30,6 +30,7 @@ list of support functions:
 * fetchGrinnCorrNetwork
 * fetchGrinnDiffCorrNetwork
 * fetchGrinnNetwork
+
 see [homepage](http://kwanjeeraw.github.io/grinn/) for the function information.
 
 Updates
@@ -39,5 +40,5 @@ Updates
 
 License
 =========
-[GNU General Public License (v3)](https://github.com/kwanjeeraw/grinn/blob/master/LICENSE)
+[GNU General Public License (v3)](https://github.com/kwanjeeraw/grinnGUI/blob/master/LICENSE)
 
