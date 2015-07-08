@@ -31,7 +31,7 @@ list of support functions:
 * fetchGrinnDiffCorrNetwork
 * fetchGrinnNetwork
 
-see [homepage](http://kwanjeeraw.github.io/grinn/) for the function information.
+see grinn [homepage](http://kwanjeeraw.github.io/grinn/) for the function information.
 
 Updates
 =========
