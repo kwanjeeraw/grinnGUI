@@ -69,29 +69,29 @@ shinyServer(function(input, output) {
   values <- reactiveValues()
   exeGrinn <- function(){
     if(input$fnCall == "fetchGrinnNetwork"){
-      values$myv = fetchGrinnNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref)
+      values$myv = fetchGrinnNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref, returnAs="tab")
     }
     if(input$fnCall == "fetchCorrNetwork"){
-      values$myv = fetchCorrNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method)
+      values$myv = fetchCorrNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchDiffCorrNetwork"){
-      values$myv = fetchDiffCorrNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method)
+      values$myv = fetchDiffCorrNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchCorrGrinnNetwork"){
       values$myv = fetchCorrGrinnNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, 
-                                     sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource)
+                                     sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource, returnAs="tab")
     }
     if(input$fnCall == "fetchDiffCorrGrinnNetwork"){
       values$myv = fetchDiffCorrGrinnNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, 
-                                         sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource)
+                                         sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource, returnAs="tab")
     }
     if(input$fnCall == "fetchGrinnCorrNetwork"){
       values$myv = fetchGrinnCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
-                                     datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method)
+                                     datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchGrinnDiffCorrNetwork"){
       values$myv = fetchGrinnDiffCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
-                                         datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method)
+                                         datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "convertToGrinnID"){
       values$myv = convertToGrinnID(txtInput=unlist(txtInput()), nodetype=input$from, dbXref=input$dbXref)
@@ -124,6 +124,17 @@ shinyServer(function(input, output) {
   output$summaryCode <- renderPrint({
     if (input$submit == 0) return()
     isolate({
+      # Create a Progress object
+      progress <- shiny::Progress$new()
+      # Make sure it closes when we exit this reactive, even if there's an error
+      on.exit(progress$close())
+      progress$set(message = "Computing network", value = 0)
+      for (i in 1:10) {
+        # Increment the progress bar, and update the detail text.
+        progress$inc(0.1, detail = "...")
+        # Pause for 0.1 seconds to simulate a long computation.
+        #Sys.sleep(0.1)
+      }
       summary(returnResult())
     })
   })
