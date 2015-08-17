@@ -1,7 +1,7 @@
 # grinnGUI
 Graphical user interface for grinn R package
 
-Version: 1.0 (08 July 2015)
+Version: 1.1 (17 August 2015)
 
 Description
 =========
@@ -38,6 +38,9 @@ see grinn [homepage](http://kwanjeeraw.github.io/grinn/) for the function inform
 
 Updates
 =========
+#### version 1.1 (17/08/15)
+* Provide delimiter options
+
 #### version 1.0 (08/07/15)
 * Initial version
 
