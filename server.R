@@ -38,62 +38,70 @@ shinyServer(function(input, output) {
     datXFile <- input$datXInput
     if (is.null(datXFile))
       return(NULL)
-    read.csv(datXFile$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE)
+    read.csv(datXFile$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE, sep = input$sep)
   })
   datYInput <- reactive({
     datYFile <- input$datYInput
     if (is.null(datYFile))
       return(NULL)
-    read.csv(datYFile$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE)
+    read.csv(datYFile$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE, sep = input$sep)
   })
   datX2Input <- reactive({
     datX2File <- input$datX2Input
     if (is.null(datX2File))
       return(NULL)
-    read.csv(datX2File$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE)
+    read.csv(datX2File$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE, sep = input$sep)
   })
   datY2Input <- reactive({
     datY2File <- input$datY2Input
     if (is.null(datY2File))
       return(NULL)
-    read.csv(datY2File$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE)
+    read.csv(datY2File$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE, sep = input$sep)
   })
   datPhenoInput <- reactive({
     datPhenoFile <- input$datPhenoInput
     if (is.null(datPhenoFile))
       return(NULL)
-    read.csv(datPhenoFile$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE)
+    read.csv(datPhenoFile$datapath, header=TRUE, row.names=1, stringsAsFactors=FALSE, sep = input$sep)
   })
 
   #execute functions
   values <- reactiveValues()
   exeGrinn <- function(){
     if(input$fnCall == "fetchGrinnNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchGrinnNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref, returnAs="tab")
     }
     if(input$fnCall == "fetchCorrNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchCorrNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchDiffCorrNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchDiffCorrNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchCorrGrinnNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchCorrGrinnNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, 
                                      sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource, returnAs="tab")
     }
     if(input$fnCall == "fetchDiffCorrGrinnNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchDiffCorrGrinnNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, 
                                          sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource, returnAs="tab")
     }
     if(input$fnCall == "fetchGrinnCorrNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchGrinnCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
                                      datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchGrinnDiffCorrNetwork"){
+      values$myv<-NULL #reset
       values$myv = fetchGrinnDiffCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
                                          datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "convertToGrinnID"){
+      values$myv<-NULL #reset
       values$myv = convertToGrinnID(txtInput=unlist(txtInput()), nodetype=input$from, dbXref=input$dbXref)
     }
   }

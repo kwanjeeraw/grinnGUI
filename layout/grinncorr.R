@@ -33,6 +33,9 @@ wellPanel(
   hr(),
   h5("Correlation analysis:"),
   fluidRow(
+    column(8, radioButtons('sep', 'Delimiter',c(Comma=',',Tab='\t',Semicolon=';'),',',inline=TRUE))
+  ),
+  fluidRow(
     column(4, fileInput(inputId='datXInput', label='datNormX *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datXExTable')))
   ),
