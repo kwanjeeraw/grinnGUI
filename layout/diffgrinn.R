@@ -2,7 +2,7 @@ mainPanel(width=12,
 fluidRow(column(12,
   mainPanel(width=12,
     h3("fetchDiffCorrGrinnNetwork"),
-    p("Compute a differential correlation network and expand the network with information from grinn internal database, see ",
+    p("Compute a differential correlation network and expand the network with information from the internal graph database, see ",
       a(href='http://kwanjeeraw.github.io/grinn/fetchdiffcorrgrinn.html',target='_blank','here'),' for argument details.'
     )
   )#end mainPanel
@@ -13,21 +13,21 @@ wellPanel(
     column(8, radioButtons('sep', 'Delimiter',c(Comma=',',Tab='\t',Semicolon=';'),',',inline=TRUE))
   ),
   fluidRow(
-    column(4, fileInput(inputId='datXInput', label='datNormX1 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+    column(4, fileInput(inputId='datXInput', label='datX1 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datXExTable')))
   ),
   fluidRow(
-    column(4, fileInput(inputId='datX2Input', label='datNormX2 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+    column(4, fileInput(inputId='datX2Input', label='datX2 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datX2ExTable')))
   ),
-  fluidRow(
-    column(4, fileInput(inputId='datYInput', label='datNormY1', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
-    column(8, mainPanel(tableOutput('datYExTable')))
-  ),
-  fluidRow(
-    column(4, fileInput(inputId='datY2Input', label='datNormY2', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
-    column(8, mainPanel(tableOutput('datY2ExTable')))
-  ),
+#   fluidRow(
+#     column(4, fileInput(inputId='datYInput', label='datY1', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+#     column(8, mainPanel(tableOutput('datYExTable')))
+#   ),
+#   fluidRow(
+#     column(4, fileInput(inputId='datY2Input', label='datY2', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+#     column(8, mainPanel(tableOutput('datY2ExTable')))
+#   ),
   hr(),
   fluidRow(  
     column(6,numericInput("pval", label = "pDiff *",value = 0.05, min = 0, max = 0.05, step = 0.001))
@@ -37,10 +37,10 @@ wellPanel(
                           choices = list("spearman"="spearman","pearson"="pearson","kendall"="kendall"),selected = "spearman"))
   ),
   fluidRow(
-    column(6,radioButtons("sourceTo", label = "sourceTo",inline = TRUE, 
-                          choices = list("metabolite"="metabolite","protein"="protein","gene"="gene","pathway"="pathway"),selected = "metabolite")),
-    column(6,radioButtons("targetTo", label = "targetTo",inline = TRUE, 
-                          choices = list("metabolite"="metabolite","protein"="protein","gene"="gene","pathway"="pathway"),selected = "pathway"))
+    column(6,radioButtons("xTo", label = "xTo",inline = TRUE, 
+                          choices = list("non"="non","metabolite"="metabolite","protein"="protein","gene"="gene","pathway"="pathway"),selected = "metabolite"))
+#     ,column(6,radioButtons("yTo", label = "yTo",inline = TRUE, 
+#                           choices = list("non"="non","metabolite"="metabolite","protein"="protein","gene"="gene","pathway"="pathway"),selected = "non"))
   ),
   fluidRow(
     column(6,checkboxGroupInput("filterSource", label ="filterSource",inline = TRUE,

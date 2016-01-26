@@ -2,7 +2,7 @@ mainPanel(width=12,
 fluidRow(column(12,
   mainPanel(width=12,
     h3("fetchGrinnNetwork"),
-    p("Reconstruct a biological network (grinn network) using information from grinn internal database, see ",
+    p("Query a network (grinn network) using information from the internal graph database, see ",
       a(href='http://kwanjeeraw.github.io/grinn/fetchgrinn.html',target='_blank','here'),' for argument details.'
     )
   )#end mainPanel

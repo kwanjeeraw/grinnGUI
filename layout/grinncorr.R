@@ -2,7 +2,7 @@ mainPanel(width=12,
 fluidRow(column(12,
   mainPanel(width=12,
     h3("fetchGrinnCorrNetwork"),
-    p("Reconstruct a grinn network using information from grinn internal database, then compute and combine with a weighted correlation network, see ",
+    p("Reconstruct a grinn network using information from the internal graph database, then compute and combine with a weighted correlation network, see ",
       a(href='http://kwanjeeraw.github.io/grinn/fetchgrinncorr.html',target='_blank','here'),' for argument details.'
     )
   )#end mainPanel
@@ -36,11 +36,11 @@ wellPanel(
     column(8, radioButtons('sep', 'Delimiter',c(Comma=',',Tab='\t',Semicolon=';'),',',inline=TRUE))
   ),
   fluidRow(
-    column(4, fileInput(inputId='datXInput', label='datNormX *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+    column(4, fileInput(inputId='datXInput', label='datX *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datXExTable')))
   ),
   fluidRow(
-    column(4, fileInput(inputId='datYInput', label='datNormY', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+    column(4, fileInput(inputId='datYInput', label='datY', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datYExTable')))
   ),
   fluidRow(  

@@ -1,11 +1,11 @@
 # grinnGUI
 Graphical user interface for grinn R package
 
-Version: 1.1 (17 August 2015)
+Version: 1.2 (25 January 2016)
 
 Description
 =========
-grinnGUI is the graphical user interface for [grinn](https://github.com/kwanjeeraw/grinn) R package.
+grinnGUI is the graphical user interface for the R-based tool [Grinn](https://github.com/kwanjeeraw/grinn).
 The user interface is implemented using [Shiny](http://shiny.rstudio.com/) and runs on a web browser (Safari, Chrome, Firefox and etc.).
 ![demo](screenshot.png)
 
@@ -27,17 +27,21 @@ Outputs are exported as tab-delimited files.
 list of support functions:
 * convertToGrinnID
 * fetchCorrGrinnNetwork
-* fetchCorrNetwork
 * fetchDiffCorrGrinnNetwork
-* fetchDiffCorrNetwork
 * fetchGrinnCorrNetwork
 * fetchGrinnDiffCorrNetwork
 * fetchGrinnNetwork
+* getGrinnDb
+* setGrinnDb
 
-see grinn [homepage](http://kwanjeeraw.github.io/grinn/) for the function information.
+see Grinn [homepage](http://kwanjeeraw.github.io/grinn/) for the function information.
 
 Updates
 =========
+#### version 1.2 (25/01/16)
+* Update parameter names in correspondence with the R functions
+* Add a function setGrinnDb
+
 #### version 1.1 (17/08/15)
 * Provide delimiter options
 

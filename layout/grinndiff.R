@@ -2,7 +2,7 @@ mainPanel(width=12,
 fluidRow(column(12,
   mainPanel(width=12,
     h3("fetchGrinnDiffCorrNetwork"),
-    p("Reconstruct a grinn network queried from grinn internal database, then compute and combine with a differential correlation network, see ",
+    p("Reconstruct a grinn network queried from the internal graph database, then compute and combine with a differential correlation network, see ",
       a(href='http://kwanjeeraw.github.io/grinn/fetchgrinndiffcorr.html',target='_blank','here'),' for argument details.'
     )
   )#end mainPanel
@@ -36,21 +36,21 @@ wellPanel(
     column(8, radioButtons('sep', 'Delimiter',c(Comma=',',Tab='\t',Semicolon=';'),',',inline=TRUE))
   ),
   fluidRow(
-    column(4, fileInput(inputId='datXInput', label='datNormX1 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+    column(4, fileInput(inputId='datXInput', label='datX1 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datXExTable')))
   ),
   fluidRow(
-    column(4, fileInput(inputId='datX2Input', label='datNormX2 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+    column(4, fileInput(inputId='datX2Input', label='datX2 *', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
     column(8, mainPanel(tableOutput('datX2ExTable')))
   ),
-  fluidRow(
-    column(4, fileInput(inputId='datYInput', label='datNormY1', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
-    column(8, mainPanel(tableOutput('datYExTable')))
-  ),
-  fluidRow(
-    column(4, fileInput(inputId='datY2Input', label='datNormY2', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
-    column(8, mainPanel(tableOutput('datY2ExTable')))
-  ),
+#   fluidRow(
+#     column(4, fileInput(inputId='datYInput', label='datY1', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+#     column(8, mainPanel(tableOutput('datYExTable')))
+#   ),
+#   fluidRow(
+#     column(4, fileInput(inputId='datY2Input', label='datY2', accept=c('text/csv','text/comma-separated-values,text/plain','.csv'))),
+#     column(8, mainPanel(tableOutput('datY2ExTable')))
+#   ),
   hr(),
   fluidRow(  
     column(6,numericInput("pval", label = "pDiff *",value = 0.05, min = 0, max = 0.05, step = 0.001))

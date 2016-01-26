@@ -1,5 +1,5 @@
 library(shiny)
-
+options(shiny.maxRequestSize = 30*1024^2) #the upload file size limit is 30MB
 shinyServer(function(input, output) {
   output$ui <- renderUI({
     if (is.null(input$fnCall))
@@ -9,13 +9,12 @@ shinyServer(function(input, output) {
     # UI component and send it to the client.
     switch(input$fnCall,
       "fetchGrinnNetwork" = source("layout/grinnnetwork.R", local=TRUE),
-      "fetchCorrNetwork" = source("layout/corrnetwork.R", local=TRUE),
-      "fetchDiffCorrNetwork" = source("layout/diffcorrnetwork.R", local=TRUE),
       "fetchCorrGrinnNetwork" = source("layout/corrgrinn.R", local=TRUE), 
       "fetchDiffCorrGrinnNetwork" = source("layout/diffgrinn.R", local=TRUE),
       "fetchGrinnCorrNetwork" = source("layout/grinncorr.R", local=TRUE), 
       "fetchGrinnDiffCorrNetwork" = source("layout/grinndiff.R", local=TRUE),
-      "convertToGrinnID" = source("layout/convertid.R", local=TRUE)
+      "convertToGrinnID" = source("layout/convertid.R", local=TRUE),
+      "setGrinnDb" = source("layout/setdb.R", local=TRUE)
     )
   })
   
@@ -33,6 +32,20 @@ shinyServer(function(input, output) {
     if (is.null(inFile))
       return(NULL)
     read.csv(inFile$datapath, header=FALSE, stringsAsFactors=FALSE)
+  })
+  xto <- reactive({
+   if(input$xTo == "non"){
+     return(NULL)
+   }else{
+     return(input$xTo)
+   }
+  })
+  yto <- reactive({
+    if(input$yTo == "non"){
+      return(NULL)
+    }else{
+      return(input$yTo)
+    }
   })
   datXInput <- reactive({
     datXFile <- input$datXInput
@@ -72,44 +85,39 @@ shinyServer(function(input, output) {
       values$myv<-NULL #reset
       values$myv = fetchGrinnNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref, returnAs="tab")
     }
-    if(input$fnCall == "fetchCorrNetwork"){
-      values$myv<-NULL #reset
-      values$myv = fetchCorrNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
-    }
-    if(input$fnCall == "fetchDiffCorrNetwork"){
-      values$myv<-NULL #reset
-      values$myv = fetchDiffCorrNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
-    }
     if(input$fnCall == "fetchCorrGrinnNetwork"){
       values$myv<-NULL #reset
-      values$myv = fetchCorrGrinnNetwork(datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, 
-                                     sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource, returnAs="tab")
+      values$myv = fetchCorrGrinnNetwork(datX=datXInput(), datY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, 
+                                     xTo=xto(), yTo=yto(), filterSource=input$filterSource, returnAs="tab")
     }
     if(input$fnCall == "fetchDiffCorrGrinnNetwork"){
       values$myv<-NULL #reset
-      values$myv = fetchDiffCorrGrinnNetwork(datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, 
-                                         sourceTo=input$sourceTo, targetTo=input$targetTo, filterSource=input$filterSource, returnAs="tab")
+      values$myv = fetchDiffCorrGrinnNetwork(datX1=datXInput(), datX2=datX2Input(), datY1=datYInput(), datY2=datY2Input(), pDiff=input$pval, method=input$method, 
+                                             xTo=xto(), yTo=yto(), filterSource=input$filterSource, returnAs="tab")
     }
     if(input$fnCall == "fetchGrinnCorrNetwork"){
       values$myv<-NULL #reset
       values$myv = fetchGrinnCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
-                                     datNormX=datXInput(), datNormY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
+                                     datX=datXInput(), datY=datYInput(), corrCoef=input$corrCoef, pval=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "fetchGrinnDiffCorrNetwork"){
       values$myv<-NULL #reset
       values$myv = fetchGrinnDiffCorrNetwork(txtInput=unlist(txtInput()), from=input$from, to=input$to, filterSource=input$filterSource, dbXref=input$dbXref,
-                                         datNormX1=datXInput(), datNormX2=datX2Input(), datNormY1=datYInput(), datNormY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
+                                         datX1=datXInput(), datX2=datX2Input(), datY1=datYInput(), datY2=datY2Input(), pDiff=input$pval, method=input$method, returnAs="tab")
     }
     if(input$fnCall == "convertToGrinnID"){
       values$myv<-NULL #reset
       values$myv = convertToGrinnID(txtInput=unlist(txtInput()), nodetype=input$from, dbXref=input$dbXref)
+    }
+    if(input$fnCall == "setGrinnDb"){
+      values$myv<-NULL #reset
+      values$myv = setGrinnDb(url=input$dburl)
     }
   }
   returnResult <- reactive({
     exeGrinn()
     values$myv
   })
-
   #outputs
   output$txtExTable <- renderTable({
     head(txtInput(), n = 5)
@@ -188,4 +196,21 @@ shinyServer(function(input, output) {
       write.table(as.matrix(returnResult()), file, sep='\t', row.names = F, quote = FALSE)
     }
   )
+  output$currentdb <- renderPrint({
+    if (input$submit == 0) return(nld)
+    isolate({
+      # Create a Progress object
+      progress <- shiny::Progress$new()
+      # Make sure it closes when we exit this reactive, even if there's an error
+      on.exit(progress$close())
+      progress$set(message = "Computing network", value = 0)
+      for (i in 1:10) {
+        # Increment the progress bar, and update the detail text.
+        progress$inc(0.1, detail = "...")
+        # Pause for 0.1 seconds to simulate a long computation.
+        #Sys.sleep(0.1)
+      }
+      returnResult()
+    })
+  })
 })#end shinyServer
