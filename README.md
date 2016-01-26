@@ -1,5 +1,5 @@
 # grinnGUI
-Graphical user interface for grinn R package
+Graphical user interface for Grinn
 
 Version: 1.2 (25 January 2016)
 
